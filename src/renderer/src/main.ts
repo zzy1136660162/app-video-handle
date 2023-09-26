@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import App from './App'
+import router from './router'
 import { Quasar } from 'quasar'
 import quasarLang from 'quasar/lang/zh-CN'
 // Import icon libraries
@@ -13,4 +14,5 @@ createApp(App)
     plugins: {}, // import Quasar plugins and add here
     lang: quasarLang
   })
+  .use(router)
   .mount('#app')

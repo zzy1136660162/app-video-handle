@@ -3,6 +3,7 @@ import { defineConfig, externalizeDepsPlugin, swcPlugin } from 'electron-vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
+import path from 'node:path'
 
 export default defineConfig({
   main: {
@@ -14,7 +15,8 @@ export default defineConfig({
   renderer: {
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src')
+        '@renderer': resolve('src/renderer/src'),
+        '@': path.resolve(__dirname, '/src')
       }
     },
     plugins: [vue({ template: { transformAssetUrls } }), vueJsx(), swcPlugin(), quasar({})]

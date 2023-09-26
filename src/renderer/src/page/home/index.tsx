@@ -1,11 +1,9 @@
 import { defineComponent } from 'vue'
 
-import { RouterView } from 'vue-router'
-
 export default defineComponent({
   props: {},
   emits: [],
-  setup: () => {
-    return () => <RouterView></RouterView>
+  setup: (props, { slots, emit, expose, attrs }) => {
+    return () => <div>1</div>
   }
 })
