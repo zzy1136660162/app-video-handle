@@ -1,10 +1,9 @@
-import { app, shell, BrowserWindow, dialog, ipcMain, Menu, MenuItem } from 'electron'
+import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { createMenu } from './menuSetting/index'
-
-
+import { InitIpcMain } from './injectHandle/index'
 
 function createWindow(): void {
   // Create the browser window.
@@ -51,9 +50,7 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-
-
-
+  InitIpcMain()
   /**
    * 创建窗口
    */

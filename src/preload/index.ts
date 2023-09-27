@@ -2,7 +2,10 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
-const api = { openFile: () => ipcRenderer.invoke('dialog:openFile') }
+const api = {
+  openFile: () => ipcRenderer.invoke('dialog:openFile'),
+  loadCSVFile: (...args) => ipcRenderer.invoke('loadCSVFile', ...args)
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

@@ -12,6 +12,9 @@ export default defineComponent({
 
     const SelectFile = async () => {
       const [filePath, fileName] = await window.api.openFile()
+      console.log(filePath, fileName);
+      const content = await window.api.loadCSVFile(filePath)
+      console.log(content)
       inputFileName.value = fileName
       inputFilePath.value = filePath
     }
