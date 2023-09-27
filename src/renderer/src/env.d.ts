@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+/// <reference types="electron-vite/node" />
 
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'
@@ -6,4 +7,3 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
-

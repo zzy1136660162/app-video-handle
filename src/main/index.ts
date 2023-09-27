@@ -1,15 +1,10 @@
-import { app, shell, BrowserWindow, dialog, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, dialog, ipcMain, Menu, MenuItem } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { createMenu } from './menuSetting/index'
 
-async function handleFileOpen() {
-  const { canceled, filePaths } = await dialog.showOpenDialog({})
 
-  if (!canceled) {
-    return filePaths[0]
-  }
-}
 
 function createWindow(): void {
   // Create the browser window.
@@ -17,7 +12,7 @@ function createWindow(): void {
     width: 900,
     height: 670,
     show: false,
-    autoHideMenuBar: true,
+    // autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -57,8 +52,16 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  ipcMain.handle('dialog:openFile', handleFileOpen)
+
+
+  /**
+   * 创建窗口
+   */
   createWindow()
+  /**
+   * 创建菜单
+   */
+  createMenu()
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.

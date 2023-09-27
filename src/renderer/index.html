@@ -4,9 +4,10 @@
     <meta charset="UTF-8" />
     <title>Electron</title>
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+<!--    放宽 CSP 配置（不推荐）： 在开发或调试阶段，您可以选择放宽 CSP 配置以便加载外部资源，但请注意，这会降低安全性，不建议在生产环境中这样做。 -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+      content="default-src 'self' *; script-src 'self'; style-src 'self' 'unsafe-inline'"
     />
   </head>
 
