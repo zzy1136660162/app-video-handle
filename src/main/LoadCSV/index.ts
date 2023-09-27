@@ -11,8 +11,6 @@ export const LoadCSVFile = async (_event: IpcMainInvokeEvent, filePath) => {
 }
 
 
-
-
 const parser = csvParser()
 
 let lineCount = 0
