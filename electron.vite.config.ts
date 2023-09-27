@@ -16,7 +16,6 @@ export default defineConfig({
     resolve: {
       alias: {
         '@renderer': resolve('src/renderer/src'),
-        '@': path.join(__dirname, 'src/renderer/src')
       }
     },
     plugins: [vue({ template: { transformAssetUrls } }), vueJsx(), swcPlugin(), quasar({})]

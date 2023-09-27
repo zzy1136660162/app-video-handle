@@ -1,6 +1,7 @@
 import { defineComponent, ref } from 'vue'
 import styles from './index.module.scss'
 import { QFile, QIcon, QInput } from 'quasar'
+import { LoadCSVFileData } from '../../../../main/LoadCSV'
 
 export default defineComponent({
   props: {},
@@ -12,9 +13,8 @@ export default defineComponent({
 
     const SelectFile = async () => {
       const [filePath, fileName] = await window.api.openFile()
-      console.log(filePath, fileName);
-      const content = await window.api.loadCSVFile(filePath)
-      console.log(content)
+      const content = await window.api.loadCSVFileData(filePath)
+      console.log(content);
       inputFileName.value = fileName
       inputFilePath.value = filePath
     }
