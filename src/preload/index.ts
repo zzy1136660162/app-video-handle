@@ -1,10 +1,12 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { LoadCSVFileData } from '../main/LoadCSV'
+import { HandleOpenFileOptions } from '../main/FileOpen'
 
 // Custom APIs for renderer
 const api = {
-  openFile: () => ipcRenderer.invoke('dialog:openFile'),
+  openFile: (options: HandleOpenFileOptions, ...args) =>
+    ipcRenderer.invoke('dialog:openFile', options, ...args),
   loadCSVFile: (...args) => ipcRenderer.invoke('loadCSVFile', ...args),
   loadCSVFileData: (...args) => ipcRenderer.invoke('loadCSVFileData', ...args)
 }

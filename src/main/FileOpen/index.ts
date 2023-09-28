@@ -1,9 +1,24 @@
-import { dialog } from 'electron'
+import { dialog, IpcMainInvokeEvent } from 'electron'
 import path from 'node:path'
 
-export async function handleFileOpen() {
-  const { canceled, filePaths } = await dialog.showOpenDialog({})
-  console.log(filePaths);
+export interface HandleOpenFileOptions {
+  properties?: Array<
+    | 'openFile'
+    | 'openDirectory'
+    | 'multiSelections'
+    | 'showHiddenFiles'
+    | 'createDirectory'
+    | 'promptToCreate'
+    | 'noResolveAliases'
+    | 'treatPackageAsDirectory'
+    | 'dontAddToRecent'
+  >
+}
+
+export async function handleFileOpen(_event: IpcMainInvokeEvent, options: HandleOpenFileOptions) {
+  console.log(options);
+  const { canceled, filePaths } = await dialog.showOpenDialog(options)
+  console.log(filePaths)
   if (!canceled) {
     return [filePaths[0], path.basename(filePaths[0])]
   }

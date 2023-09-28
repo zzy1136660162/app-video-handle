@@ -4,7 +4,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('@renderer/components/Layout'),
-    redirect: '/home',
+    redirect: '/video_handle',
     children: [
       {
         path: '/home',
