@@ -8,8 +8,8 @@ import { InitIpcMain } from './InjectHandle'
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 400,
-    height: 400,
+    width: 800,
+    height: 800,
     show: false,
     // autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),

@@ -38,14 +38,14 @@ export default defineComponent({
               <QAvatar>
                 <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
               </QAvatar>
-              Title
+              工具箱
             </QToolbarTitle>
 
             <QBtn dense flat round icon="menu" onClick={toggleRightDrawer} />
           </QToolbar>
 
           <QTabs align="left">
-            <QRouteTab to="/video_handle" label="Page One" />
+            <QRouteTab to="/video_handle" label="视频封面输出" />
             <QRouteTab to="/page2" label="Page Two" />
             <QRouteTab to="/page3" label="Page Three" />
           </QTabs>
