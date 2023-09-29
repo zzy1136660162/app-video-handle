@@ -1,5 +1,4 @@
 import { LoadCSVFileData } from '../LoadCSV'
-import cp from 'child_process'
 import fs from 'fs'
 import path from 'node:path'
 import http from 'node:http'
@@ -7,7 +6,6 @@ import https from 'node:https'
 import pathToFfmpeg from 'ffmpeg-static'
 import ffmpeg from 'fluent-ffmpeg'
 import { IpcMainInvokeEvent } from 'electron'
-import { date } from 'quasar'
 
 ffmpeg.setFfmpegPath(pathToFfmpeg as string)
 
@@ -81,7 +79,6 @@ const TransformVideoFileToImage = (fileName, outPutDir) => {
       .run()
   })
 }
-
 
 export const TransformVideoByCSVURL = async (
   _event: IpcMainInvokeEvent,
