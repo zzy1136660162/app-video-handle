@@ -53,7 +53,6 @@ const HttpRequestDownFilePromise = (url: string): Promise<string> => {
 const TransformVideoFileToImage = async (fileName, outPutDir) => {}
 const execJpg = (pathFile, saveFilePath) => {
   return new Promise((resolve, reject) => {
-
     // ffmpeg.
     const bb = `ffmpeg -ss 00:00:05 -t 00:00:06 -i ${pathFile} -an -f image2 -s 640:1136 ${saveFilePath} -y`
     // console.log('当前指令:', bb)

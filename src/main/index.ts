@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { createMenu } from './MenuSetting'
 import { InitIpcMain } from './InjectHandle'
+import OpenAi from './OpenAi'
 
 function createWindow(): void {
   // Create the browser window.
@@ -55,6 +56,7 @@ app.whenReady().then(() => {
    * 创建窗口
    */
   createWindow()
+  OpenAi()
   /**
    * 创建菜单
    */
