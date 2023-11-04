@@ -2,13 +2,15 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { LoadCSVFileData } from '../main/LoadCSV'
 import { HandleOpenFileOptions } from '../main/FileOpen'
+import { TransformVideoByCSVURL } from "../main/VideoHandle";
 
 // Custom APIs for renderer
 const api = {
   openFile: (options: HandleOpenFileOptions, ...args) =>
     ipcRenderer.invoke('dialog:openFile', options, ...args),
   loadCSVFile: (...args) => ipcRenderer.invoke('loadCSVFile', ...args),
-  loadCSVFileData: (...args) => ipcRenderer.invoke('loadCSVFileData', ...args)
+  loadCSVFileData: (...args) => ipcRenderer.invoke('loadCSVFileData', ...args),
+  transformVideoByCSVURL: (...args) => ipcRenderer.invoke('transformVideoByCSVURL', ...args)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

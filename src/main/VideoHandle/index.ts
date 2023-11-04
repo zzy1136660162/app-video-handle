@@ -1,21 +1,22 @@
 import { LoadCSVFileData } from '../LoadCSV'
-import cp from 'child_process'
 import fs from 'fs'
-import path from 'path'
-import http from 'http'
+import path from 'node:path'
+import http from 'node:http'
+import https from 'node:https'
 import pathToFfmpeg from 'ffmpeg-static'
 import ffmpeg from 'fluent-ffmpeg'
-console.log(pathToFfmpeg)
-ffmpeg.setFfmpegPath(pathToFfmpeg)
+import { IpcMainInvokeEvent } from 'electron'
 
-const dirPath = './temp'
+ffmpeg.setFfmpegPath(pathToFfmpeg as string)
+
+const tempDirPath = './temp'
 const fsPromise = fs.promises
 
 class TempFileDirPath {
   #tempFileDir
 
-  constructor(dirPath) {
-    this.#tempFileDir = dirPath
+  constructor(localDirPath, tempDirPath) {
+    this.#tempFileDir = path.join(localDirPath, tempDirPath)
   }
 
   getTempFileDirPath() {
@@ -27,22 +28,27 @@ class TempFileDirPath {
   }
 }
 
-const tempFileDirPath = new TempFileDirPath(dirPath)
-;(async () => {
+const InitTempFileDir = async (localDirPath: string) => {
+  const tempFileDirPath = new TempFileDirPath(localDirPath, tempDirPath)
   try {
     await fsPromise.access(tempFileDirPath.getTempFileDirPath())
   } catch (e) {
-    fsPromise.mkdir(tempFileDirPath.getTempFileDirPath(), { recursive: true })
+    await fsPromise.mkdir(tempFileDirPath.getTempFileDirPath(), { recursive: true })
   }
-})()
-const HttpRequestDownFilePromise = (url: string): Promise<string> => {
+  return tempFileDirPath
+}
+const HttpRequestDownFilePromise = (url: string, localDirPath: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     try {
-      const fileName = path.basename(url)
-      const filePathName = tempFileDirPath.getTempFilePath(fileName)
-      http.get(url, (res) => {
-        res.pipe(fs.createWriteStream(filePathName)).on('finish', () => {
-          resolve(filePathName)
+      InitTempFileDir(localDirPath).then((outPutDir) => {
+        const fileName = path.basename(url)
+        const filePathName = outPutDir.getTempFilePath(fileName)
+        console.log(filePathName)
+        const requestUtil = url.indexOf('https://') == 0 ? https : http
+        requestUtil.get(url, (res) => {
+          res.pipe(fs.createWriteStream(filePathName)).on('finish', () => {
+            resolve(filePathName)
+          })
         })
       })
     } catch (error) {
@@ -50,33 +56,54 @@ const HttpRequestDownFilePromise = (url: string): Promise<string> => {
     }
   })
 }
-const TransformVideoFileToImage = async (fileName, outPutDir) => {}
-const execJpg = (pathFile, saveFilePath) => {
+const TransformVideoFileToImage = (fileName, outPutDir) => {
   return new Promise((resolve, reject) => {
-    // ffmpeg.
-    const bb = `ffmpeg -ss 00:00:05 -t 00:00:06 -i ${pathFile} -an -f image2 -s 640:1136 ${saveFilePath} -y`
-    // console.log('当前指令:', bb)
-    cp.exec(bb, function (res) {
-      // console.log('执行的结果:', JSON.stringify(res))
-      console.log(`${saveFilePath} success...`)
-      resolve({ success: true })
-    })
+    console.log('TransformVideoFileToImage', fileName)
+    ffmpeg(fileName)
+      .setStartTime('00:00:00')
+      .duration('00:00:01')
+      .noAudio()
+      .size('640x1136')
+      .addOption('-frames:v', '1')
+      .toFormat('image2')
+      .output(outPutDir)
+      .on('end', () => {
+        console.log('Conversion finished.')
+        resolve({ success: true })
+      })
+      .on('error', (err) => {
+        console.error('Error:', err)
+        reject({ success: false })
+      })
+      .on('start', (commandLine) => console.error('start:', commandLine))
+      .run()
   })
-  //这个指令也能转
-  // const aa = `./ffmpeg -i ${pathFile} -y -f image2 -frames 1 ${saveFilePath}`
-  // ./ffmpeg -ss 00:00:00 -t 00:00:01 -i f9.mp4 -an -f image2 -s 640:1136 a123.jpeg
 }
 
-const TransformVideoByCSVURL = async (csvPath: string, outPutDir: string, urlField) => {
+export const TransformVideoByCSVURL = async (
+  _event: IpcMainInvokeEvent,
+  csvPath: string,
+  outPutDir: string,
+  urlField: string
+) => {
   const dataJson = await LoadCSVFileData(null, csvPath, true)
-  const urlList = dataJson.map((s) => s[urlField || 'url' || 'URL'])
+  const urlList = dataJson.map((s) => s[urlField])
+
   for (let i = 0; i < urlList.length; i++) {
-    const localFilePathName = await HttpRequestDownFilePromise(urlList[i])
-    await TransformVideoFileToImage(localFilePathName)
+    const localFilePathName = await HttpRequestDownFilePromise(urlList[i], outPutDir)
+    await TransformVideoFileToImage(
+      localFilePathName,
+      path.join(
+        outPutDir,
+        path.basename(localFilePathName, path.extname(localFilePathName)) + '.png'
+      )
+    )
     await fsPromise.unlink(localFilePathName)
   }
+  return
 }
 
 export default {
-  HttpRequestDownFilePromise
+  HttpRequestDownFilePromise,
+  TransformVideoByCSVURL
 }
