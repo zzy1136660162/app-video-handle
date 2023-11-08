@@ -45,7 +45,8 @@ async function main() {
         },
         { role: 'user', content: '如何写一篇小说，科幻类的' }
       ],
-      model: 'gpt-3.5-turbo'
+      // model: 'gpt-3.5-turbo'
+      model: 'gpt-4'
     })
     console.log(completion.choices[0])
   } catch (e) {

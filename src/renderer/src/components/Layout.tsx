@@ -46,7 +46,7 @@ export default defineComponent({
 
           <QTabs align="left">
             <QRouteTab to="/video_handle" label="视频封面输出" />
-            <QRouteTab to="/page2" label="Page Two" />
+            <QRouteTab to="/page2" label="ChatGpt" />
             <QRouteTab to="/page3" label="Page Three" />
           </QTabs>
         </QHeader>
