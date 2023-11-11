@@ -1,8 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import { LoadCSVFileData } from '../main/LoadCSV'
 import { HandleOpenFileOptions } from '../main/FileOpen'
-import { TransformVideoByCSVURL } from "../main/VideoHandle";
 
 // Custom APIs for renderer
 const api = {

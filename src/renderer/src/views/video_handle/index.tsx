@@ -68,11 +68,10 @@ export default defineComponent({
             <div class="q-gutter-md">
               <div>1.请选择带视频路径的.csv文件</div>
               <QInput
-                label='请选择文件'
+                label="请选择文件"
                 onClick={SelectFile}
                 dense={dense.value}
                 outlined
-                separator={{ label: 'Cell', value: 'cell' }}
                 v-model={inputFileName.value}
                 modelValue={inputFileName.value}
               >
@@ -87,10 +86,11 @@ export default defineComponent({
                 bordered
                 rows={csvContent.value}
                 columns={csvColums.value}
-                dense={dense.value}
+                // dense={dense.value}
                 title="CSV内容预览"
                 row-key="index"
                 virtual-scroll
+                separator={'cell'}
                 v-model:pagination={pagination.value}
                 rowsPerPageOptions={[0]}
               >

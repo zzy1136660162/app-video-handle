@@ -6,9 +6,12 @@ import https from 'node:https'
 import pathToFfmpeg from 'ffmpeg-static'
 import ffmpeg from 'fluent-ffmpeg'
 import { IpcMainInvokeEvent } from 'electron'
+import log from 'electron-log/main'
 
-ffmpeg.setFfmpegPath(pathToFfmpeg as string)
-
+const _pathToFfmpeg = (pathToFfmpeg as string).replace('app.asar', 'app.asar.unpacked')
+ffmpeg.setFfmpegPath(_pathToFfmpeg)
+log.initialize({ preload: true })
+log.info(_pathToFfmpeg)
 const tempDirPath = './temp'
 const fsPromise = fs.promises
 
@@ -69,10 +72,12 @@ const TransformVideoFileToImage = (fileName, outPutDir) => {
       .output(outPutDir)
       .on('end', () => {
         console.log('Conversion finished.')
+        log.info('Conversion finished.')
         resolve({ success: true })
       })
       .on('error', (err) => {
         console.error('Error:', err)
+        log.error('Error:' + err)
         reject({ success: false })
       })
       .on('start', (commandLine) => console.error('start:', commandLine))
